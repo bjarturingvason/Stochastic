@@ -1,0 +1,29 @@
+---
+title: "Day1 - Stochastic"
+author: "bji12"
+date: "2025-06-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+X0 = as.integer(1)
+m = as.integer(2^15)
+a = as.integer(3)
+c = as.integer(17)
+
+
+X = rep(NA,m)
+X[1] <- X0
+for (i in 2:10000) {
+  X[i] <- (a*X[i-1]+c) %% m
+}
+hist(X,breaks=10)
+```
+```{r}
+
+```
+
