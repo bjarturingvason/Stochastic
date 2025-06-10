@@ -1,0 +1,23 @@
+from scipy.stats import expon, norm, pareto, kstest, anderson
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+N = 10000
+
+#a)
+exp_sample = expon.rvs(size=N)
+fig, ax = plt.subplots()
+ax.hist(exp_sample, bins=40, density=True, alpha=0.6, edgecolor='black',
+        label='Simulated histogram')
+
+x = np.linspace(0, exp_sample.max(), 400)
+pdf = np.exp(-x)                             # f(x)=e^{-x} for λ=1
+ax.plot(x, pdf, linewidth=2, label='Exp(1) pdf')
+ax.set_title("Exponential(λ=1)")
+ax.set_xlabel("x"); ax.set_ylabel("density")
+ax.legend()
+plt.savefig('Figures/exp-3-1.png')
+plt.show()
+
+#b)
