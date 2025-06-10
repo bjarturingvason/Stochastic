@@ -42,10 +42,15 @@ dof = k - 1
 p_chi2 = 1 - chi2.cdf(chi2_stat, dof)
 print(f'p-value for the Chisq test:{p_chi2}')
 
+median = 0.5
+signs = np.where(u >= median, 1, 0)
+runs = 1 + np.sum(signs[:-1] != signs[1:])
+n1, n0 = signs.sum(), N - signs.sum()
+expected_runs = 1 + 2 * n1 * n0 / N
+var_runs = (2 * n1 * n0 * (2 * n1 * n0 - N)) / (N**2 * (N - 1))
+z_runs = (runs - expected_runs) / math.sqrt(var_runs)
 
 
-
-# -- Use the Series.autocorr *built‑in* method ------------------------------------
 s = pd.Series(X)
 lags = range(0,10)
 r = [s.autocorr(lag=lag) for lag in lags]
