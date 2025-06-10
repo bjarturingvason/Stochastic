@@ -42,8 +42,9 @@ def autocorr(x, h=1):
     x = x - x.mean()
     return np.dot(x[:-h], x[h:]) / np.dot(x, x)
 
-lags = [1, 2, 3, 5, 10]
-r = [autocorr(u, h) for h in lags]
+s = pd.Series(u)
+lags = range(0,50)
+r = [s.autocorr(lag=lag) for lag in lags]
 
 # ----------------- 6. Plots ------------------------------------------------------
 # Histogram
@@ -52,6 +53,7 @@ plt.hist(u, bins=k, edgecolor='black')
 plt.title("Histogram of 10 000 values – system RNG")
 plt.xlabel("Value")
 plt.ylabel("Frequency")
+plt.savefig('Hist-1-2.png')
 
 # Successive-pair scatter plot
 plt.figure()
@@ -59,14 +61,17 @@ plt.scatter(u[:-1], u[1:], s=4)
 plt.title("Successive pairs (u_n , u_{n+1}) – system RNG")
 plt.xlabel("u_n")
 plt.ylabel("u_{n+1}")
+plt.savefig('succpairs-1-2.png')
+
 
 # Autocorrelation bar plot
 plt.figure()
-plt.bar(lags, r, width=0.8)
+plt.bar(lags, r, width=0.4)
 plt.axhline(0, linewidth=1)
 plt.title("Autocorrelations – system RNG")
 plt.xlabel("Lag (h)")
 plt.ylabel("r(h)")
+plt.savefig('Autocorr-1-2.png')
 
 plt.show()
 

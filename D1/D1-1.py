@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import chi2
 import pandas as pd
+import math as math
+from scipy.stats import kstest, chi2
+
 #THe LCG
 def LCG(X0, m, a, c, N):
     X = np.zeros(N)
@@ -43,7 +46,7 @@ p_chi2 = 1 - chi2.cdf(chi2_stat, dof)
 print(f'p-value for the Chisq test:{p_chi2}')
 
 median = 0.5
-signs = np.where(u >= median, 1, 0)
+signs = np.where(X >= median, 1, 0)
 runs = 1 + np.sum(signs[:-1] != signs[1:])
 n1, n0 = signs.sum(), N - signs.sum()
 expected_runs = 1 + 2 * n1 * n0 / N
@@ -63,3 +66,50 @@ plt.xlabel("Lag (h)")
 plt.ylabel("r(h)")
 plt.savefig('Figures/Autocorrelation.png')
 plt.show()
+
+
+import math
+from scipy.stats import kstest, chi2
+
+# --- Modified LCG function to generate batches ---
+def test_lcg_batches(X0, m, a, c, N, num_batches=20):
+    results = []
+    for _ in range(num_batches):
+        X0 = np.random.randint(1,m)
+        X = LCG(X0, m, a, c, N)
+        u = X / m
+        # Chi-squared test
+        k = 10
+        observed, _ = np.histogram(u, bins=k)
+        expected = np.full(k, N / k)
+        chi2_stat = ((observed - expected) ** 2 / expected).sum()
+        p_chi2 = 1 - chi2.cdf(chi2_stat, k-1)
+        
+        # Kolmogorov-Smirnov test
+        ks_stat, p_ks = kstest(u, 'uniform')
+        
+        
+        results.append({
+            "Batch": _ + 1,
+            "χ² Statistic": chi2_stat,
+            "χ² p-value": p_chi2,
+            "KS Statistic": ks_stat,
+            "KS p-value": p_ks,
+        })
+    
+    return pd.DataFrame(results)
+
+# --- Run tests on 20 batches ---
+batch_results = test_lcg_batches(105, m, a, c, N, num_batches=20)
+
+# --- Check consistency of results ---
+chi2_passes = np.sum(batch_results["χ² p-value"] > 0.05)  # Count passes (p > 0.05)
+ks_passes = np.sum(batch_results["KS p-value"] > 0.05)    # Count passes (p > 0.05)
+
+print(f"χ² test passed {chi2_passes}/20 times ({chi2_passes/20*100:.1f}%)")
+print(f"KS test passed {ks_passes}/20 times ({ks_passes/20*100:.1f}%)")
+
+# --- Display full results ---
+print("\nDetailed batch results:")
+print(batch_results)
+
