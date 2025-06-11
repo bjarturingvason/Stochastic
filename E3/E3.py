@@ -37,7 +37,7 @@ pdf = (1/np.sqrt(2*np.pi)) * np.exp(-x**2 / 2)
 ax.plot(x, pdf, linewidth=2)
 ax.set_title("Normal(0,1) – Box-Muller")
 ax.set_xlabel("x"); ax.set_ylabel("density")
-plt.savefig('Figures/Norm-3-1.png')
+#plt.savefig('Figures/Norm-3-1.png')
 plt.show()
 
 ks_stat, ks_p = kstest(norm_sample, 'norm')
@@ -62,7 +62,7 @@ for k in k_vals:
     ax.set_title(f"Pareto β=1, k={k}")
     ax.set_xlabel("x"); ax.set_ylabel("density")
     filename = f"Figures/Pareto-3-{k:.2f}.png"  # e.g. "pareto_hist_k_2.05.png"
-    fig.savefig(filename)
+    #fig.savefig(filename)
     plt.show()
 
     # ----- KS test ----------------------------------------------
@@ -86,3 +86,5 @@ for k in k_vals:
     })
 df = pd.DataFrame(rows).round(4)
 print(df)
+
+
