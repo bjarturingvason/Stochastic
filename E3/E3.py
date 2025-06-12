@@ -26,6 +26,7 @@ plt.show()
 #tests
 ks_stat, ks_p = kstest(exp_sample, 'expon')
 ad_stat, _, _ = anderson(exp_sample, 'expon')
+print(f'Exp dist. KS-stat:{ks_stat} KS-p:{ks_p}')
 
 #b)
 norm_sample =  norm.rvs(size=N)
@@ -42,6 +43,7 @@ plt.show()
 
 ks_stat, ks_p = kstest(norm_sample, 'norm')
 ad_stat, crit, sig = anderson(norm_sample, 'norm')
+print(f'Normal dist. KS-stat:{ks_stat} KS-p:{ks_p}')
 
 #c)
 k_vals = [2.05, 2.5, 3, 4]
@@ -49,24 +51,25 @@ N = 10_000
 beta = 1
 rows = []
 for k in k_vals:
-    u = np.random.default_rng().random(N)
-    pareto_sample = (1 - u)**(-1/k) - 1       # inverse-cdf
+    u = np.random.default_rng()
+    pareto_sample = pareto.rvs(b=k, scale=beta, size=N, random_state=u)
 
     # ----- plot --------------------------------------------------
     fig, ax = plt.subplots()
     ax.hist(pareto_sample, bins=80, range=(0, 10), density=True,
             alpha=0.6, edgecolor='black')
-    x = np.linspace(0, 10, 400)
-    pdf = k * (1+x)**(-k-1)
+    x = np.linspace(beta, 10, 400)
+    pdf = k * beta**k / x**(k + 1)
     ax.plot(x, pdf, linewidth=2)
     ax.set_title(f"Pareto β=1, k={k}")
     ax.set_xlabel("x"); ax.set_ylabel("density")
     filename = f"Figures/Pareto-3-{k:.2f}.png"  # e.g. "pareto_hist_k_2.05.png"
-    #fig.savefig(filename)
+    fig.savefig(filename)
     plt.show()
 
     # ----- KS test ----------------------------------------------
     ks_stat, ks_p = kstest(pareto_sample, 'pareto', args=(k,))
+    print(f'Pareto ks-p, with k = {k}: {ks_p}')
 
     #2)
     sample_mean = pareto_sample.mean()
