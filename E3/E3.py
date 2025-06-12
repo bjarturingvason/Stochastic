@@ -21,7 +21,7 @@ ax.set_title("Exponential(λ=1)")
 ax.set_xlabel("x"); ax.set_ylabel("density")
 ax.legend()
 #plt.savefig('Figures/exp-3-1.png')
-plt.show()
+#plt.show()
 
 #tests
 ks_stat, ks_p = kstest(exp_sample, 'expon')
@@ -39,7 +39,7 @@ ax.plot(x, pdf, linewidth=2)
 ax.set_title("Normal(0,1) – Box-Muller")
 ax.set_xlabel("x"); ax.set_ylabel("density")
 #plt.savefig('Figures/Norm-3-1.png')
-plt.show()
+#plt.show()
 
 ks_stat, ks_p = kstest(norm_sample, 'norm')
 ad_stat, crit, sig = anderson(norm_sample, 'norm')
@@ -63,9 +63,9 @@ for k in k_vals:
     ax.plot(x, pdf, linewidth=2)
     ax.set_title(f"Pareto β=1, k={k}")
     ax.set_xlabel("x"); ax.set_ylabel("density")
-    filename = f"Figures/Pareto-3-{k:.2f}.png"  # e.g. "pareto_hist_k_2.05.png"
-    fig.savefig(filename)
-    plt.show()
+    filename = f"E3/Figures/Pareto-3-{k:.2f}.png"  # e.g. "pareto_hist_k_2.05.png"
+    #fig.savefig(filename)
+    #plt.show()
 
     # ----- KS test ----------------------------------------------
     ks_stat, ks_p = kstest(pareto_sample, 'pareto', args=(k,))

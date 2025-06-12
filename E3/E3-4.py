@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import kstest
+
+from Latex_helper import Pareto_TexTable
 
 def pareto_via_composition(beta, k, size, rng=None):
     """
@@ -24,12 +27,20 @@ sample = pareto_via_composition(beta, k, size=N, rng=rng)
 
 # Plot histogram and theoretical PDF
 plt.figure()
-plt.hist(sample, bins=50, density=True)
+plt.hist(sample, density=True, bins = 200, edgecolor='black')
 x = np.linspace(beta, sample.max(), 400)
 pdf = k * beta**k / x**(k+1)
 plt.plot(x, pdf)
 plt.title(f"Pareto(β={beta}, k={k}) – Composition Method")
 plt.xlabel("x")
 plt.ylabel("Density")
-plt.savefig('Pareto-composition')
+plt.savefig('E3/Figures/Pareto-composition')
+plt.xlim(0,10)
 plt.show()
+
+table = None
+table = Pareto_TexTable(sample, beta,k,results_df=table)
+print(table.to_latex(index=False,
+                     float_format="%.3f".__mod__,
+                     caption="Pareto normality checks",
+                     label="tab:pareto"))
