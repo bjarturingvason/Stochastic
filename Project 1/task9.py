@@ -21,7 +21,7 @@ Q_untrt = np.array([
     [0,        0,       0,      0,       0    ]
 ])
 
-rng = np.random.default_rng(seed=2025)
+rng = np.random.default_rng(seed=42)
 
 def simulate_lifetime(Q, rng):
     """simulate one woman's lifetime (months) with treatment matrix Q"""
