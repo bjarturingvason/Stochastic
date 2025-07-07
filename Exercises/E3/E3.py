@@ -69,7 +69,7 @@ for k in k_vals:
 
     # ----- KS test ----------------------------------------------
     ks_stat, ks_p = kstest(pareto_sample, 'pareto', args=(k,))
-    print(f'Pareto ks-p, with k = {k}: {ks_p}')
+    print(f'Pareto ks-p, with k = {k}: {ks_stat}, {ks_p}')
 
     #2)
     sample_mean = pareto_sample.mean()

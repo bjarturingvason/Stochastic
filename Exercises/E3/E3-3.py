@@ -43,3 +43,51 @@ summary = pd.DataFrame({
 })
 
 print(summary)
+
+# --- existing code above here ---
+
+import matplotlib.pyplot as plt
+
+# 1) CI for the mean ----------------------------------------------------------
+fig, ax = plt.subplots(figsize=(6, 8))
+
+for idx, row in df.iterrows():
+    colour = "tab:green" if row["mean_contains"] else "tab:red"
+    ax.hlines(
+        y=idx + 1,               # vertical position for this replication
+        xmin=row["mean_low"],
+        xmax=row["mean_high"],
+        color=colour,
+        linewidth=2,
+    )
+
+ax.axvline(true_mu, color="black", linestyle="--", label=f"true μ = {true_mu}")
+ax.set_xlabel("μ")
+ax.set_ylabel("Replication")
+ax.set_title("95 % confidence intervals for the mean")
+ax.legend()
+plt.tight_layout()
+plt.savefig('E3-3-1.png', dpi = 300)
+plt.show()
+
+# 2) CI for the variance ------------------------------------------------------
+fig, ax = plt.subplots(figsize=(6, 8))
+
+for idx, row in df.iterrows():
+    colour = "tab:green" if row["var_contains"] else "tab:red"
+    ax.hlines(
+        y=idx + 1,
+        xmin=row["var_low"],
+        xmax=row["var_high"],
+        color=colour,
+        linewidth=2,
+    )
+
+ax.axvline(true_sigma2, color="black", linestyle="--", label=f"true σ² = {true_sigma2}")
+ax.set_xlabel("σ²")
+ax.set_ylabel("Replication")
+ax.set_title("95 % confidence intervals for the variance")
+ax.legend()
+plt.tight_layout()
+plt.savefig('E3-3.png', dpi = 300)
+plt.show()
